@@ -1,7 +1,7 @@
 local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 
-local API_KEY = "AQ.Ab8RN6JmkHeuHMnNxoxGVTMxaw4vxNDPBPOBJobi3g1R6lnGfw"
+local API_KEY = "AQ.Ab8RN6J_7rL5GR8qcTTAqyxkrZtzVJeP5VL-GixMqu1_Qps5MQ"
 local API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent"
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -116,7 +116,7 @@ local function AddMessage(sender, message, isError, streamFrame)
     if not streamFrame then
         MessageFrame.Size = UDim2.new(1, 0, 0, 0)
         MessageFrame.AutomaticSize = Enum.AutomaticSize.Y
-        MessageFrame.BackgroundColor3 = isError and Color3.fromRGB(60, 20, 20) or (sender == "You" and Color3.fromRGB(40, 40, 45) or Color3.fromRGB(35, 40, 35))
+        MessageFrame.BackgroundColor3 = sender == "You" and Color3.fromRGB(40, 40, 45) or Color3.fromRGB(35, 40, 35)
         MessageFrame.BorderSizePixel = 0
         MessageFrame.Parent = ChatFrame
 
@@ -253,7 +253,7 @@ local function SendMessage()
             isTyping = false
         else
             streamFrame:Destroy()
-            AddMessage("Levino", "Error, try again later", true)
+            AddMessage("Levino", "Error, try again later")
         end
     end)
 end
