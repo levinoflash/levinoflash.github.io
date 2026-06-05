@@ -90,6 +90,7 @@ KeyInputBox.PlaceholderText = "Enter your key here..."
 KeyInputBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
 KeyInputBox.TextColor3 = Color3.fromRGB(180, 180, 180)
 KeyInputBox.TextXAlignment = Enum.TextXAlignment.Left
+KeyInputBox.TextTruncate = Enum.TextTruncate.AtEnd
 KeyInputBox.ClearTextOnFocus = false
 KeyInputBox.Parent = KeyBoxOuter
 
@@ -155,14 +156,14 @@ local CopyButtonPadding = Instance.new("UIPadding")
 CopyButtonPadding.PaddingTop = UDim.new(0, 2)
 CopyButtonPadding.Parent = CopyLinkButton
 
-local keyLink = "https://example.com/getkey"
-local validKey = "LEVINO2024"
+local keyLink = "https://levinorbx.github.io/Levino-Cheat/"
+local validKey = game:HttpGet("https://raw.githubusercontent.com/Levinorbx/Levino-Cheat/refs/heads/main/Key.txt"):gsub("%s+", "")
 
 CheckKeyButton.Activated:Connect(function()
     local enteredKey = KeyInputBox.Text
     if enteredKey == validKey then
         KeySystemFrame:Destroy()
-        loadstring(game:HttpGet("https://example.com/script.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Levinorbx/Levino-Cheat/refs/heads/main/Levino-Cheat.lua"))()
     else
         KeyInputBox.Text = ""
     end
