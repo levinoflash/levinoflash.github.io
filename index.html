@@ -79,6 +79,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .key-display.fade {
+            opacity: 0.3;
         }
 
         .loading {
@@ -171,6 +176,8 @@
 
         async function loadKey() {
             try {
+                keyDisplay.classList.add('fade');
+                await new Promise(resolve => setTimeout(resolve, 300));
                 keyDisplay.innerHTML = '<span class="loading">Loading key...</span>';
                 copyBtn.disabled = true;
                 const response = await fetch(KEY_URL + '?t=' + Date.now());
@@ -178,12 +185,14 @@
                 currentKey = (await response.text()).trim();
                 if (currentKey) {
                     keyDisplay.textContent = currentKey;
+                    keyDisplay.classList.remove('fade');
                     copyBtn.disabled = false;
                 } else {
                     throw new Error('Empty');
                 }
             } catch (error) {
                 keyDisplay.textContent = 'Error loading key';
+                keyDisplay.classList.remove('fade');
             }
         }
 
