@@ -93,29 +93,49 @@
 
         .button {
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            color: #1a1a1a;
-            font-weight: 600;
+            background: rgba(40, 40, 40, 0.8);
+            border: 1px solid rgba(80, 80, 80, 0.15);
+            color: #b4b4b4;
             padding: 14px 20px;
             font-size: 13px;
             font-family: 'Consolas', monospace;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: none;
+            margin-bottom: 10px;
         }
 
         .button:hover {
-            background: #ffffff;
+            background: rgba(50, 50, 50, 0.9);
+            border-color: rgba(100, 100, 100, 0.3);
+            color: #ffffff;
         }
 
         .button:active {
             transform: scale(0.98);
         }
 
+        .button.primary {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .button.primary:hover {
+            background: #ffffff;
+        }
+
         .button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        .info {
+            text-align: center;
+            font-size: 12px;
+            color: #808080;
+            margin-top: 20px;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -133,12 +153,19 @@
             </div>
         </div>
 
-        <button class="button" id="copyBtn" disabled>Copy Key</button>
+        <button class="button primary" id="copyBtn" disabled>Copy Key</button>
+        <button class="button" id="refreshBtn">Refresh Key</button>
+
+        <div class="info">
+            <p>Use this key in the Levino Cheat key system.<br>
+            Key updates automatically from GitHub.</p>
+        </div>
     </div>
 
     <script>
         const keyDisplay = document.getElementById('keyDisplay');
         const copyBtn = document.getElementById('copyBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
         const KEY_URL = 'https://raw.githubusercontent.com/Levinorbx/Levino-Cheat/refs/heads/main/Key.txt';
         let currentKey = '';
 
@@ -174,6 +201,7 @@
         }
 
         copyBtn.addEventListener('click', copyKey);
+        refreshBtn.addEventListener('click', loadKey);
         loadKey();
     </script>
 </body>
