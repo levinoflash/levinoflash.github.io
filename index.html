@@ -308,7 +308,7 @@
                         },
                         body: JSON.stringify({
                             model: 'gpt-oss-120b',
-                            max_completion_tokens: 1024,
+                            max_completion_tokens: 4096,
                             temperature: 0.3,
                             top_p: 1,
                             stream: true,
@@ -329,10 +329,14 @@
                     let full = '';
                     let msgDiv = null;
                     let buffer = '';
+                    let streamEnded = false;
 
-                    while (true) {
+                    while (!streamEnded) {
                         const { done, value } = await reader.read();
-                        if (done) break;
+                        if (done) {
+                            streamEnded = true;
+                            break;
+                        }
 
                         buffer += decoder.decode(value, { stream: true });
                         const lines = buffer.split('\n');
@@ -341,7 +345,11 @@
                         for (const line of lines) {
                             if (line.startsWith('data: ')) {
                                 const data = line.slice(6).trim();
-                                if (data === '[DONE]') continue;
+                                if (data === '[DONE]') {
+                                    streamEnded = true;
+                                    break;
+                                }
+
                                 try {
                                     const parsed = JSON.parse(data);
                                     const content = parsed.choices?.[0]?.delta?.content;
@@ -362,8 +370,36 @@
                         }
                     }
 
+                    if (buffer.trim()) {
+                        const lines = buffer.split('\n');
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                const data = line.slice(6).trim();
+                                if (data === '[DONE]') continue;
+                                try {
+                                    const parsed = JSON.parse(data);
+                                    const content = parsed.choices?.[0]?.delta?.content;
+                                    if (content) {
+                                        full += content;
+                                    }
+                                } catch (e) {}
+                            }
+                        }
+                    }
+
                     if (full) {
+                        if (msgDiv) {
+                            msgDiv.textContent = full;
+                        } else {
+                            const empty = messagesContainer.querySelector('.empty-state');
+                            if (empty) empty.remove();
+                            msgDiv = document.createElement('div');
+                            msgDiv.className = 'msg ai';
+                            msgDiv.textContent = full;
+                            messagesContainer.appendChild(msgDiv);
+                        }
                         chatHistory.push({ role: 'assistant', content: full });
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
                     }
 
                 } catch (error) {
@@ -385,7 +421,6 @@
             });
 
             userInput.focus();
-            console.log('Levino Flash ready');
         })();
     </script>
 </body>
